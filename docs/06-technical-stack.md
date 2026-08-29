@@ -32,4 +32,4 @@
 
 ---
 
-⬅ [Deterministic Execution](./05-deterministic-execution.md) · [Index](../README.md) · Next → [Limitations and Roadmap](./07-limitations-and-roadmap.md)
+⬅ [Deterministic Execution](./05-deterministic-execution.md) · [Index](../README.md)
