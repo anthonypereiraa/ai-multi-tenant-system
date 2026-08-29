@@ -4,7 +4,8 @@
 | ------------------------ | ---------------------------- |
 | Orchestration            | n8n                          |
 | WhatsApp Integration     | Evolution API                |
-| Multimodal Understanding | Gemini API                   |
+| Multimodal Processing    | Gemini API                   |
+| Conversational AI        | OpenAI API                   |
 | Buffer / Temporary State | Redis                        |
 | Conversational Memory    | PostgreSQL (n8n Chat Memory) |
 | Persistent Domain Data   | Supabase                     |
