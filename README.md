@@ -1,30 +1,30 @@
-# Arquitetura Multi-Tenant de Atendimento com IA para Clínicas
+# Multi-Tenant AI-Powered Patient Support Architecture for Clinics
 
-> Arquitetura de automação com IA para atendimento via WhatsApp, projetada para atender múltiplas clínicas com uma única estrutura de processamento, configurada dinamicamente por tenant.
+> An AI automation architecture for patient support via WhatsApp, designed to serve multiple clinics through a single processing infrastructure, dynamically configured per tenant.
 
-Este repositório documenta a **arquitetura conceitual** de um sistema de atendimento automatizado desenvolvido para clínicas, com foco em multi-tenancy, orquestração de agentes de IA e execução determinística de operações críticas.
+This repository documents the **conceptual architecture** of an automated patient support system developed for clinics, focusing on multi-tenancy, AI agent orchestration, and deterministic execution of critical operations.
 
-> ⚠️ Este é um repositório de **documentação técnica de portfólio**. Ele descreve decisões de arquitetura e fluxos conceituais. Não contém workflows reais do n8n, prompts proprietários, credenciais, dados de clínicas/pacientes ou qualquer informação capaz de reconstruir o produto.
+> ⚠️ This is a **technical portfolio documentation repository**. It describes architectural decisions and conceptual flows. It does not contain actual n8n workflows, proprietary prompts, credentials, clinic/patient data, or any information that could be used to reconstruct the product.
 
-## Índice da documentação
+## Documentation Index
 
-| Documento | Conteúdo |
-|---|---|
-| [`docs/01-visao-geral.md`](docs/01-visao-geral.md) | Visão geral do sistema e o problema que ele resolve |
-| [`docs/02-multi-tenancy.md`](docs/02-multi-tenancy.md) | Conceito multi-tenant e configuração dinâmica da IA |
-| [`docs/03-fluxo-de-mensagens.md`](docs/03-fluxo-de-mensagens.md) | Fluxo de mensagens, normalização, buffer (Redis) e memória conversacional |
-| [`docs/04-guardrails-e-agentes.md`](docs/04-guardrails-e-agentes.md) | Camada de guardrails e orquestração de agentes (Router, Service, Scheduling) |
-| [`docs/05-execucao-deterministica.md`](docs/05-execucao-deterministica.md) | Separação entre interpretação (LLM) e execução (código) + arquitetura de responsabilidades |
-| [`docs/06-stack-tecnica.md`](docs/06-stack-tecnica.md) | Tecnologias usadas e o que foi desenvolvido vs. componentes de terceiros |
-| [`docs/07-limitacoes-e-roadmap.md`](docs/07-limitacoes-e-roadmap.md) | Limitações conhecidas, roadmap e princípio de design |
+| Document                                                                   | Content                                                                                    |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [`docs/01-overview.md`](docs/01-overview.md)                               | System overview and the problem it solves                                                  |
+| [`docs/02-multi-tenancy.md`](docs/02-multi-tenancy.md)                     | Multi-tenant architecture and dynamic AI configuration                                     |
+| [`docs/03-message-flow.md`](docs/03-message-flow.md)                       | Message flow, normalization, buffering (Redis), and conversational memory                  |
+| [`docs/04-guardrails-and-agents.md`](docs/04-guardrails-and-agents.md)     | Guardrail layer and agent orchestration (Router, Service, Scheduling)                      |
+| [`docs/05-deterministic-execution.md`](docs/05-deterministic-execution.md) | Separation between interpretation (LLM) and execution (code) + responsibility architecture |
+| [`docs/06-technical-stack.md`](docs/06-technical-stack.md)                 | Technologies used and what was developed vs. third-party components                        |
+| [`docs/07-limitations-and-roadmap.md`](docs/07-limitations-and-roadmap.md) | Known limitations, roadmap, and design principles                                          |
 
-## Resumo
+## Summary
 
-O sistema funciona como uma secretária virtual: interpreta mensagens de WhatsApp (texto, áudio, imagem, vídeo, documento), mantém contexto de conversa, responde dúvidas institucionais e executa operações de agenda (criar, consultar, cancelar, reagendar).
+The system operates as a virtual receptionist: it interprets WhatsApp messages (text, audio, images, videos, and documents), maintains conversational context, answers institutional questions, and performs scheduling operations (create, retrieve, cancel, and reschedule appointments).
 
-O diferencial não é "uma IA para clínicas", mas sim:
+The key differentiator is not simply **"AI for clinics"**, but rather:
 
-> Uma estrutura compartilhada de processamento, configurada dinamicamente por tenant, na qual mensagens são normalizadas e agregadas antes do processamento, agentes especializados cuidam de responsabilidades distintas, e operações críticas são delegadas a workflows determinísticos em vez de raciocínio livre da LLM.
+> A shared processing infrastructure dynamically configured per tenant, where messages are normalized and aggregated before processing, specialized agents handle distinct responsibilities, and critical operations are delegated to deterministic workflows instead of relying on unrestricted LLM reasoning.
 
 ```mermaid
 flowchart TD
@@ -35,4 +35,4 @@ flowchart TD
 
 ## Stack
 
-n8n · Evolution API · Gemini API · OpenAI API· Redis · PostgreSQL · Supabase · Docker Swarm
+n8n · Evolution API · Gemini API · OpenAI API · Redis · PostgreSQL · Supabase · Docker Swarm
