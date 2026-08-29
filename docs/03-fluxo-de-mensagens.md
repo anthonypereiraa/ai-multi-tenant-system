@@ -1,35 +1,74 @@
-# 2. Conceito Multi-Tenant
+# 3. Fluxo de Mensagens
 
-Em vez de criar uma IA ou workflow independente por clínica, existe uma estrutura única que recebe configurações específicas de cada tenant em tempo de execução.
+```mermaid
+flowchart LR
+    P[Paciente] --> W[WhatsApp]
+    W --> E[Evolution API]
+    E --> X[Camada de enriquecimento<br/>payload + contexto da clínica/paciente]
+    X --> N[Webhook n8n]
+```
+
+A camada de enriquecimento pertence à infraestrutura da aplicação (fora do workflow principal) e adiciona ao payload os dados de contexto necessários — clínica, assistente e paciente.
+
+Ao entrar no n8n, os dados são reorganizados em blocos conceituais de contexto:
+
+```
+Assistant Configuration
+        +
+Clinic Configuration
+        +
+Patient Context
+        +
+Current Message
+```
+
+## Normalização de mensagens
+
+O sistema aceita múltiplos formatos de entrada e converte tudo para uma representação textual comum antes de qualquer processamento pelos agentes.
 
 ```mermaid
 flowchart TD
-    A[Shared AI Architecture] --> B[Clinic A]
-    A --> C[Clinic B]
-    A --> D[Clinic C]
-    B --> B1[Configuration] --> B2[Personalized AI]
-    C --> C1[Configuration] --> C2[Personalized AI]
-    D --> D1[Configuration] --> D2[Personalized AI]
+    M[Incoming Message] --> T[Texto]
+    M --> AU[Áudio]
+    M --> MD[Mídia<br/>imagem/vídeo/documento]
+    T --> NT[Normalized Text]
+    AU -->|Gemini| NT
+    MD -->|Gemini| NT
 ```
 
-A diferenciação entre tenants é feita por um identificador único (**clinicKey**), recebido já no payload inicial — enriquecido por uma camada intermediária da aplicação — e propagado ao longo do fluxo para as operações que precisam consultar o sistema externo.
+Isso evita que cada agente precise lidar individualmente com múltiplos formatos de entrada.
 
-## Configuração dinâmica da IA
+## Buffer de mensagens (Redis)
 
-Três blocos de contexto são montados dinamicamente antes de qualquer agente ser executado:
+Usuários de WhatsApp costumam enviar várias mensagens curtas em sequência ("Oi", "queria saber", "se vocês atendem Unimed"). Processar cada uma isoladamente geraria execuções redundantes da IA e pouco contexto por execução.
 
-| Bloco | Conteúdo |
+Solução: as mensagens são acumuladas no **Redis** dentro de uma janela de ~30 segundos.
+
+```mermaid
+flowchart LR
+    M1[Message 1] --> R[Redis Buffer]
+    M2[Message 2] --> R
+    M3[Message 3] --> R
+    R --> WT{Última mensagem<br/>ainda é a mais recente?}
+    WT -->|Sim| AG[Agrega mensagens]
+    WT -->|Não, chegou nova| STOP[Interrompe execução anterior]
+    AG --> AI[AI Agent]
+```
+
+Se uma mensagem mais nova chega antes da janela expirar, o processamento anterior é interrompido — evitando respostas duplicadas ou fora de ordem.
+
+O Redis aqui tem responsabilidade diferente da memória conversacional: é **estado temporário**, não histórico.
+
+## Memória conversacional
+
+Implementada com o mecanismo de Chat Memory do n8n, persistido em **PostgreSQL**. Mantém uma janela de histórico recente para dar contexto aos agentes durante o atendimento.
+
+| Componente | Responsabilidade |
 |---|---|
-| **Assistant Configuration** | Regras e comportamento configurados pelo usuário da plataforma |
-| **Clinic Configuration** | Nome, dados institucionais, horários, serviços e demais informações da clínica |
-| **Patient Context** | Informações disponíveis sobre o paciente, quando existentes |
-
-```
-Same AI Structure + Dynamic Context = Tenant-specific Behavior
-```
-
-Essa estrutura comum é o que permite reutilizar a mesma arquitetura de agentes entre clínicas diferentes.
+| Redis | Buffer temporário de mensagens |
+| PostgreSQL / Chat Memory | Histórico conversacional |
+| Sistema externo | Dados persistentes de domínio (clínicas, pacientes, agenda) |
 
 ---
 
-⬅ [Visão geral](./01-visao-geral.md) · [Índice](../README.md) · Próximo → [Fluxo de mensagens](./03-fluxo-de-mensagens.md)
+⬅ [Multi-tenancy](./02-multi-tenancy.md) · [Índice](../README.md) · Próximo → [Guardrails e agentes](./04-guardrails-e-agentes.md)
