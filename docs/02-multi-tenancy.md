@@ -1,6 +1,6 @@
-# 2. Conceito Multi-Tenant
+# 2. Multi-Tenant Concept
 
-Em vez de criar uma IA ou workflow independente por clínica, existe uma estrutura única que recebe configurações específicas de cada tenant em tempo de execução.
+Instead of creating an independent AI or workflow for each clinic, the system uses a shared architecture that receives tenant-specific configurations at runtime.
 
 ```mermaid
 flowchart TD
@@ -12,24 +12,24 @@ flowchart TD
     D --> D1[Configuration] --> D2[Personalized AI]
 ```
 
-A diferenciação entre tenants é feita por um identificador único (**clinicKey**), recebido já no payload inicial — enriquecido por uma camada intermediária da aplicação — e propagado ao longo do fluxo para as operações que precisam consultar o sistema externo.
+Tenant differentiation is handled through a unique identifier (**clinicKey**), received in the initial payload — enriched by an intermediate application layer — and propagated throughout the flow for operations that need to query the external system.
 
-## Configuração dinâmica da IA
+## Dynamic AI Configuration
 
-Três blocos de contexto são montados dinamicamente antes de qualquer agente ser executado:
+Three context blocks are dynamically assembled before any agent is executed:
 
-| Bloco | Conteúdo |
-|---|---|
-| **Assistant Configuration** | Regras e comportamento configurados pelo usuário da plataforma |
-| **Clinic Configuration** | Nome, dados institucionais, horários, serviços e demais informações da clínica |
-| **Patient Context** | Informações disponíveis sobre o paciente, quando existentes |
+| Block                       | Content                                                                                   |
+| --------------------------- | ----------------------------------------------------------------------------------------- |
+| **Assistant Configuration** | Rules and behavior configured by the platform user                                        |
+| **Clinic Configuration**    | Name, institutional information, business hours, services, and other clinic-specific data |
+| **Patient Context**         | Available patient information, when applicable                                            |
 
-```
+```text
 Same AI Structure + Dynamic Context = Tenant-specific Behavior
 ```
 
-Essa estrutura comum é o que permite reutilizar a mesma arquitetura de agentes entre clínicas diferentes.
+This shared structure makes it possible to reuse the same agent architecture across different clinics while maintaining tenant-specific behavior.
 
 ---
 
-⬅ [Visão geral](./01-visao-geral.md) · [Índice](../README.md) · Próximo → [Fluxo de mensagens](./03-fluxo-de-mensagens.md)
+⬅ [Overview](./01-overview.md) · [Index](../README.md) · Next → [Message Flow](./03-message-flow.md)
