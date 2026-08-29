@@ -36,7 +36,3 @@ flowchart TD
 ## Stack
 
 n8n · Evolution API · Gemini API · OpenAI API· Redis · PostgreSQL · Supabase · Docker Swarm
-
----
-
-*Documentação conceitual de portfólio. Não representa o produto comercial completo nem contém código, prompts ou dados reais.*
