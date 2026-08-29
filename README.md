@@ -16,7 +16,6 @@ This repository documents the **conceptual architecture** of an automated patien
 | [`docs/04-guardrails-and-agents.md`](docs/04-guardrails-and-agents.md)     | Guardrail layer and agent orchestration (Router, Service, Scheduling)                      |
 | [`docs/05-deterministic-execution.md`](docs/05-deterministic-execution.md) | Separation between interpretation (LLM) and execution (code) + responsibility architecture |
 | [`docs/06-technical-stack.md`](docs/06-technical-stack.md)                 | Technologies used and what was developed vs. third-party components                        |
-| [`docs/07-limitations-and-roadmap.md`](docs/07-limitations-and-roadmap.md) | Known limitations, roadmap, and design principles                                          |
 
 ## Summary
 
