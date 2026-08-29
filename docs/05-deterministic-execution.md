@@ -19,8 +19,6 @@ LLM        → interpretation and language
 Code       → deterministic rules
 ```
 
-Rescheduling, for example, is treated as a composite operation (cancel + create), with the complexity encapsulated within the workflow — the agent only interacts with a high-level operation.
-
 ## Responsibility Architecture
 
 ```mermaid id="4n2w8k"
